@@ -1,1 +1,4 @@
-// CraftingService class
+package services;
+
+public class CraftingService {
+}
