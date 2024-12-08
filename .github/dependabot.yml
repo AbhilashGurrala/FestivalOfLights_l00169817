@@ -5,7 +5,7 @@
 
 version: 2
 updates:
-  - package-ecosystem: "Java" # See documentation for possible values
-    directory: "/" # Location of package manifests
+  - package-ecosystem: "maven"  # Use 'maven' for Java projects
+    directory: "/"             # Root directory of your project
     schedule:
-      interval: "weekly"
+      interval: "weekly"       # Frequency of updates
