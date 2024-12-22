@@ -32,6 +32,10 @@ jobs:
           restore-keys: |
             ${{ runner.os }}-maven-
 
+      # Static Code Analysis
+      - name: Run Static Code Analysis
+        run: mvn pmd:check
+
       # Build the project
       - name: Build with Maven
         run: mvn clean install
@@ -51,6 +55,11 @@ jobs:
         with:
           name: coverage-report
           path: target/site/jacoco/index.html
+
+      # Notify on Failure
+      - name: Notify Failure
+        if: failure()
+        run: echo "Build or tests failed. Please check the logs for details."
 
   dependency-check:
     runs-on: ubuntu-latest
