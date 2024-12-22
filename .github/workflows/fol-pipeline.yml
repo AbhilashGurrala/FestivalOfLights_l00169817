@@ -4,9 +4,6 @@ on:
   pull_request:
     branches:
       - main
-  push:
-    branches:
-      - main
 
 jobs:
   build-and-test:
@@ -24,7 +21,6 @@ jobs:
           java-version: 11
           distribution: 'temurin'
 
-      # Cache Maven dependencies
       - name: Cache Maven dependencies
         uses: actions/cache@v3
         with:
@@ -41,9 +37,11 @@ jobs:
       - name: Run tests
         run: mvn test
 
+      # Generate JaCoCo report
       - name: Generate JaCoCo report
         run: mvn jacoco:report
 
+      # Upload JaCoCo Coverage Report
       - name: Upload JaCoCo Coverage Report
         if: success()
         uses: actions/upload-artifact@v3
@@ -63,5 +61,6 @@ jobs:
       - name: Run Dependency Review
         uses: actions/dependency-review-action@v2
         with:
-          base_ref: ${{ github.event.pull_request.base.ref }}
-          head_ref: ${{ github.event.pull_request.head.ref }}
+          repo-token: ${{ secrets.GITHUB_TOKEN }}
+          base-ref: ${{ github.event.pull_request.base.ref }}
+          head-ref: ${{ github.event.pull_request.head.ref }}
