@@ -43,4 +43,13 @@ public class LanternTest {
         assertEquals("Paper", retrievedMaterials.get(0).getName());
         assertEquals(2, retrievedMaterials.get(0).getQuantity());
     }
+
+    @Test
+    public void testCalculateTotalMaterialQuantity() {
+        // Add another material to the list
+        materials.add(new Material("Glue", 3));
+
+        // Total should be 6 (2 + 1 + 3)
+        assertEquals(6, lantern.calculateTotalMaterialQuantity());
+    }
 }

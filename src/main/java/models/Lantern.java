@@ -54,4 +54,17 @@ public class Lantern {
     public void addMaterial(Material material) {
         materials.add(material);
     }
+
+    /**
+     * Calculates the total quantity of all materials used in the lantern.
+     *
+     * @return The total quantity of materials.
+     */
+    public int calculateTotalMaterialQuantity() {
+        int total = 0;
+        for (Material material : materials) {
+            total += material.getQuantity();
+        }
+        return total;
+    }
 }
