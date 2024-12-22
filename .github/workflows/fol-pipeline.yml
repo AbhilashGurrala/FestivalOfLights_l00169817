@@ -32,6 +32,10 @@ jobs:
           restore-keys: |
             ${{ runner.os }}-maven-
 
+      # Static Code Analysis
+      - name: Run Static Code Analysis
+        run: mvn pmd:check
+
       # Build the project
       - name: Build with Maven
         run: mvn clean install
@@ -44,6 +48,19 @@ jobs:
       - name: Generate JaCoCo report
         run: mvn jacoco:report
 
+      # Calculate JaCoCo Coverage
+      - name: Calculate JaCoCo Coverage
+        run: |
+          COVERAGE=$(xmllint --xpath "string(//report/counter[@type='LINE']/@covered)" target/site/jacoco/jacoco.xml)
+          MISSED=$(xmllint --xpath "string(//report/counter[@type='LINE']/@missed)" target/site/jacoco/jacoco.xml)
+          TOTAL=$((COVERAGE + MISSED))
+          PERCENT=$((100 * COVERAGE / TOTAL))
+          echo "JaCoCo Coverage: $PERCENT%"
+        env:
+          COVERAGE: 0
+          MISSED: 0
+          TOTAL: 0
+
       # Upload JaCoCo Coverage Report
       - name: Upload JaCoCo Coverage Report
         if: success()
@@ -51,6 +68,11 @@ jobs:
         with:
           name: coverage-report
           path: target/site/jacoco/index.html
+
+      # Notify on Failure
+      - name: Notify Failure
+        if: failure()
+        run: echo "Build or tests failed. Please check the logs for details."
 
   dependency-check:
     runs-on: ubuntu-latest
