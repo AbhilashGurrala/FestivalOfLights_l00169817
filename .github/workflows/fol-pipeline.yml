@@ -1,10 +1,10 @@
 name: Festival of Lights CI Pipeline
 
 on:
-  push:
+  pull_request:
     branches:
       - main
-  pull_request:
+  push:
     branches:
       - main
 
@@ -24,6 +24,7 @@ jobs:
           java-version: 11
           distribution: 'temurin'
 
+      # Cache Maven dependencies
       - name: Cache Maven dependencies
         uses: actions/cache@v3
         with:
@@ -61,3 +62,6 @@ jobs:
       # Dependency Check with Dependabot
       - name: Run Dependency Review
         uses: actions/dependency-review-action@v2
+        with:
+          base_ref: ${{ github.event.pull_request.base.ref }}
+          head_ref: ${{ github.event.pull_request.head.ref }}
